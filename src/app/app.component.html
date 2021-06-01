@@ -1,0 +1,78 @@
+<div class="toolbar" role="banner">
+  <img
+    alt="Lambang Provinsi Jawa Barat"
+    src="../assets/Logo-propinsi-jawa-barat.png"
+  />
+  <span>Sistem Informasi Geografis - Pemetaan Jumlah Perbaikan Rumah Tidak Layak Huni Provinsi Jawa Barat</span>
+</div>
+
+<div class="content" role="main">
+
+  <div class="header-filter">
+    <span class="filter">Filter : </span>
+    
+    <mat-form-field appearance="fill" class="field-tahun">
+      <mat-label>Tahun</mat-label>
+      <mat-select [(ngModel)]="tahun" (ngModelChange)="onChangeTahun($event)">
+        <mat-option value="2013">2013</mat-option>
+        <mat-option value="2014">2014</mat-option>
+        <mat-option value="2015">2015</mat-option>
+        <mat-option value="2016">2016</mat-option>
+        <mat-option value="2017">2014</mat-option>
+        <mat-option value="2018">2018</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill" class="field-anggaran" >
+      <mat-label>Sumber Anggaran</mat-label>
+      <mat-select [(ngModel)]="anggaran" (ngModelChange)="onChangeAnggaran($event)">
+        <mat-option value="APBD I">APBD I</mat-option>
+        <mat-option value="APBD II">APBD II</mat-option>
+        <mat-option value="APBN">APBN</mat-option>
+        <mat-option value="CSR">CSR</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="row">
+    <div class="col-left">
+      <div class="map-frame">
+        <div id="map"></div>
+      </div>
+    </div>
+    <div class="col-right mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      
+        <!-- Position Column -->
+        <ng-container matColumnDef="nama_kabupaten_kota">
+          <th mat-header-cell *matHeaderCellDef> Kabupaten/Kota </th>
+          <td mat-cell *matCellDef="let element"> {{element.nama_kabupaten_kota}} </td>
+        </ng-container>
+      
+        <!-- Name Column -->
+        <ng-container matColumnDef="jumlah_realisasi">
+          <th mat-header-cell *matHeaderCellDef> Jumlah Realisasi </th>
+          <td mat-cell *matCellDef="let element"> {{element.jumlah_realisasi}} </td>
+        </ng-container>
+      
+        <!-- Weight Column -->
+        <ng-container matColumnDef="anggaran">
+          <th mat-header-cell *matHeaderCellDef> Sumber Anggaran </th>
+          <td mat-cell *matCellDef="let element"> {{element.anggaran}} </td>
+        </ng-container>
+      
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="tahun">
+          <th mat-header-cell *matHeaderCellDef> Tahun </th>
+          <td mat-cell *matCellDef="let element"> {{element.tahun}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+  
+</div>
+<router-outlet></router-outlet>
