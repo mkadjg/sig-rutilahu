@@ -128,7 +128,7 @@ export class AppComponent {
             });
 
           this._div.innerHTML = '<h4>Perbaikan Rutilahu Jabar</h4>' +  (props ?
-              '<b>' + props.KABKOT + '</b><br />' + jumlah + ' rumah / mi<sup>2</sup>'
+              '<b>' + props.KABKOT + '</b><br />' + jumlah + ' rumah'
               : 'Arahkan mouse ke peta');
         };
 
