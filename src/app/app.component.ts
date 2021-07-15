@@ -12,11 +12,19 @@ import { jabarGeoJson } from '../environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  // form
   anggaran: string = 'APBD I';
   tahun: string = '2013';
+
+  // temp
+
+  // table
   displayedColumns: string[] = ['nama_kabupaten_kota', 'jumlah_realisasi', 'anggaran', 'tahun'];
   dataSource = new MatTableDataSource<any>([]);
+  
+  // leafleat
   map:any = L.Map;
+  tempInfo:any = L.control(); 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -111,7 +119,6 @@ export class AppComponent {
 
         // method that we will use to update the control based on feature properties passed
         info.update = function (props) {
-          console.log(props);
           let jumlah = 0;
           if (props) 
             response.data.map(item => {
@@ -126,6 +133,7 @@ export class AppComponent {
         };
 
         info.addTo(this.map);
+        this.tempInfo = info;
 
         var legend = L.control({position: 'bottomleft'});
 
@@ -163,7 +171,8 @@ export class AppComponent {
         this.dataSource.paginator = this.paginator;
 
         let geoJson = L.geoJson;
-        let info = L.control();
+        var info = L.control();
+        this.map.removeControl(this.tempInfo);
 
         function getColor(d) {
           return d > 1000 ? '#800026' :
@@ -177,7 +186,6 @@ export class AppComponent {
         }
 
         function style(feature) {
-          console.log("call")
           let jumlah = 0;
           response.data.map(item => {
             if (item.kode_kabupaten_kota == feature.properties.ID_KAB) {
@@ -228,28 +236,28 @@ export class AppComponent {
         }
 
         info.onAdd = function (map) {
-          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          this._div = L.DomUtil.create('div', 'info');
           this.update();
           return this._div;
-      };
+        };
 
-      // method that we will use to update the control based on feature properties passed
-      info.update = function (props) {
-        console.log(props);
-        let jumlah = 0;
-        if (props) 
-          response.data.map(item => {
-            if (item.kode_kabupaten_kota == props.ID_KAB) {
-              jumlah = item.jumlah_realisasi; 
-            }
-          });
+        // method that we will use to update the control based on feature properties passed
+        info.update = function (props) {
+          let jumlah = 0;
+          if (props) 
+            response.data.map(item => {
+              if (item.kode_kabupaten_kota == props.ID_KAB) {
+                jumlah = item.jumlah_realisasi; 
+              }
+            });
 
-        this._div.innerHTML = '<h4>Perbaikan Rutilahu Jabar</h4>' +  (props ?
-            '<b>' + props.KABKOT + '</b><br />' + jumlah + ' rumah / mi<sup>2</sup>'
-            : 'Arahkan mouse ke peta');
-      };
+          this._div.innerHTML = '<h4>Perbaikan Rutilahu Jabar</h4>' +  (props ?
+              '<b>' + props.KABKOT + '</b><br />' + jumlah + ' rumah / mi<sup>2</sup>'
+              : 'Arahkan mouse ke peta');
+        };
 
-      info.addTo(this.map);
+        info.addTo(this.map);
+        this.tempInfo = info;
 
         geoJson = L.geoJson(jabarGeoJson, {
           style: style,
